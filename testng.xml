@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Regression_TestSuite" parallel="false" thread-count="2">
+	<!--- Pass test data file name at run time which get captured in test case 
+		with data provider -->
+	<parameter name="TestFileName" value="projectModule1/Regression" />
+	<listeners>
+		<listener class-name="com.generic.AnnotationTransformer"/>
+	</listeners>
+	<test name="Regression_Tests" parallel="false">
+		<classes>
+        <class name="com.scripts.CorePerformance.CORE_Exploratory_CCBModule_1" />
+        <class name="com.scripts.CorePerformance.DashboardTest" />
+        <class name="com.scripts.CorePerformance.EmployeeManagementTest" />
+        <class name="com.scripts.CorePerformance.EmployeeMnmgt_AnnouncementTest" />
+        <class name="com.scripts.CorePerformance.HRAdministrationTest" />
+        <class name="com.scripts.CorePerformance.LoginTest" />
+        <class name="com.scripts.CorePerformance.RecruitmentATSTest" />
+        <class name="com.scripts.NSR.CRN_CRF_1_1" />
+        <class name="com.scripts.NSR.CRN_CRF_1_7" />
+        <class name="com.scripts.NSR.NSR_Core_16_1" />
+    </classes>
+	</test> <!-- Regression -->
+</suite> <!-- Regression -->
