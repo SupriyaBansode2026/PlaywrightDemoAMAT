@@ -14,10 +14,6 @@ import com.pageFactory.CorePerformance.OrganizationPage;
 
 public class ViewForOrganization {
 
-	private CorePerformancePage objCorePerformancePage;
-	private Utilities objUtilities;
-	private Pojo objPojo;
-	private WrapperFunctions objWrapperFunctions;
 	private OrganizationPage objOrganizationPage;
 	private HRAdministrationPage objHRAdministrationPage;
 
@@ -25,35 +21,53 @@ public class ViewForOrganization {
 
 	public ViewForOrganization(Pojo objPojo) {
 
-		objCorePerformancePage = new CorePerformancePage(objPojo);
+		new CorePerformancePage(objPojo);
 		objOrganizationPage=new OrganizationPage(objPojo);
-		objWrapperFunctions = objPojo.getObjWrapperFunctions();
-		objUtilities = objPojo.getObjUtilities();
 		objHRAdministrationPage=new HRAdministrationPage(objPojo);
 
 	}
 	
-	//pooja code starts
-	public void validateOrganization() {
-//		objHRAdministrationPage.clickOnMenu();
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_btn_Organization);
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_submenu_GeneralInformation);
+	public void validateOrganization_clickMenu() {
+		objHRAdministrationPage.clickOnMenu();
+	}
+		public void organizationmenu(String str) {
+
+		objOrganizationPage.clickOrganizationMenu(str);
+		}
+		public void generalInformationSubmenu() {
+
+		objOrganizationPage.clickGeneralInformationSubMenu();
 		objOrganizationPage.fill_GeneralInformationForm();
-		objOrganizationPage.setNote();
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_btn_submit);
-		System.out.println("VERIFIED - Organization:General Information Created Successfully");
+	}
+		public void enterNote(String str) {
+
+		objOrganizationPage.setNote(str);
+		}
+		public void performSubmit() {
+
+		objOrganizationPage.clickSubmit();
+		}
+		//VERIFIED - Organization:General Information Created Successfully
 		
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_submenu_Structure);
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuregridrecord);
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuremodule_editbtn);
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuregridrecord_3dots);
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuregridrecord_3dots_delete);
-		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_confirmation_popup_delete);
+//		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_submenu_Structure);
+//		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuregridrecord);
+//		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuremodule_editbtn);
+//		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuregridrecord_3dots);
+//		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuregridrecord_3dots_delete);
+//		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_confirmation_popup_delete);
+		public void structureSubmenu() {
+
+		objOrganizationPage.performActionsOnStructureSubmenu();
+		}
+		public void verifypopuptext(String str) {
+			objOrganizationPage.verfiypopuptext(str);
+		}
+		public void clickDelete(String str) {
+			objOrganizationPage.performDeleteActionOnPopup(str);
+		}
+		//further can add 
 //		objWrapperFunctions.waitTillElementPresent(objOrganizationPage.loc_structuremodule_donebtn);
 //		objWrapperFunctions.checkElementDisplyed(objOrganizationPage.loc_structuremodule_donebtn);
 //		objOrganizationPage.clickTopToolTipMenu(objOrganizationPage.loc_structuremodule_donebtn);
 //		objOrganizationPage.clickDone(objOrganizationPage.loc_structuremodule_donebtn);
 	}	
-	//pooja code ends
-
-}

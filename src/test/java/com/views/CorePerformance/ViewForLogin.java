@@ -2,9 +2,6 @@ package com.views.CorePerformance;
 
 import com.generic.Pojo;
 import com.generic.Utilities;
-import com.generic.WrapperFunctions;
-import com.pageFactory.CorePerformance.CorePerformancePage;
-import com.pageFactory.CorePerformance.DashboardPage;
 import com.pageFactory.CorePerformance.LoginPage;
 
 public class ViewForLogin {

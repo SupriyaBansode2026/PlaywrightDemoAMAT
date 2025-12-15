@@ -1,44 +1,48 @@
 package com.scripts.CorePerformance;
+ 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
-import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
+ 
 import com.generic.BaseTest;
 import com.generic.Pojo;
-import com.views.CorePerformance.ViewForDashboard;
+import com.views.CorePerformance.ViewForLogin;
 import com.views.CorePerformance.ViewForRecruitmentATS;
-
+ 
 public class RecruitmentATSTest extends BaseTest {
-	
-	private static final String String = null;
 	Properties objCCBProperties;
+	Pojo objPojo;
+	private ViewForLogin objViewForLogin;
 	private ViewForRecruitmentATS objViewForRecruitmentATS;
-	
-
 	@BeforeClass
-	public void initPageObjects() {
-		objViewForRecruitmentATS = new ViewForRecruitmentATS(this);
+	public void setUpTest() {
+		System.out.println("STEP - Launch Browser");
+		initializeWebEnvironment();
+		objViewForLogin = new ViewForLogin(this);
 		objCCBProperties = this.getObjConfig();
+		objViewForRecruitmentATS = new ViewForRecruitmentATS(this);
+	}
+	@Test
+	public void verifyRecruitmentTabAddCandidateFunctionality_TC6() {
+		objCCBProperties = this.loadConfigPropertiesForModules("CorePerformance");
+		objViewForLogin.login(objCCBProperties.getProperty("user"), objCCBProperties.getProperty("password"));
+		objViewForRecruitmentATS.clickOnRecruitmentATSTab();
+		objViewForRecruitmentATS.clickOnAddCandidateButton();
+		objViewForRecruitmentATS.enterCandidateFullName(objCCBProperties.getProperty("candidateFirstName"), objCCBProperties.getProperty("candidateLastName"), objCCBProperties.getProperty("emailID"));
+		objViewForRecruitmentATS.clickOnSaveButton();
+		objViewForRecruitmentATS.checkStatusOfNewAddedCandidate(objCCBProperties.getProperty("expectedStageStatus"));
+		objViewForRecruitmentATS.verifyFloatingSuccessMsgDisplaying();
 	}
 	
-	@Test
-	public void verifyRecruitmentTab_TC6() {
-		System.out.println("STEP - Click on 'Recruitment(ATS)' tab.");
-		objViewForRecruitmentATS.clickOnRecruitmentATSTab();
-		System.out.println("STEP - Click on 'Add Candidate' button.");
-		objViewForRecruitmentATS.clickOnAddCandidateButton();
-		System.out.println("STEP - Enter candidate 'First Name' 'Last Name' and 'Email'.");
-		objViewForRecruitmentATS.enterCandidateFullName(objCCBProperties.getProperty("candidateFirstName"), objCCBProperties.getProperty("candidateLastName"), objCCBProperties.getProperty("emailID"));
-	//	System.out.println("STEP - Select Vacancy option from dropdown.");
-		System.out.println("STEP - Click on 'Save' button.");
-		objViewForRecruitmentATS.clickOnSaveButton();
-		System.out.println("VERIFY - Stage status of newly added candidate should be 'Application Received'.");
-		String status = "Application Received";
-		Assert.assertEquals(objViewForRecruitmentATS.checkStatusOfNewAddedCandidate(), status);
+	@AfterClass
+	public void tearDownTest() {
+		tearDownWebEnvironment();
+		objPojo = null;
+		objViewForLogin = null;
+		objCCBProperties = null;
+		objViewForRecruitmentATS = null;
 	}
 }

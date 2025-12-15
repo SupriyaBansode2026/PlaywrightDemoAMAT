@@ -3,11 +3,12 @@ package com.pageFactory.CorePerformance;
 import java.util.Properties;
 import java.util.Random;
 
-import com.microsoft.playwright.Locator;
 import com.generic.Pojo;
 import com.generic.Utilities;
 import com.generic.WrapperFunctions;
 import com.pageFactory.CorePerformance.CorePerformancePage;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
 
 public class HRAdministrationPage {
 
@@ -15,100 +16,96 @@ public class HRAdministrationPage {
     private Utilities objUtilities;
     private Pojo objPojo;
     private Properties objConfig;
-    boolean bResult = false;
     private CorePerformancePage objCorePerformancePage;
+    private Page page;
+    boolean bResult = false;
 
-    // Locators
     private Locator loc_leftmenu_HRAdministration;
     private Locator loc_header_toptooltip_HRAdministration;
-    public Locator loc_btn_ManageUserRoles;
-    public Locator loc_btn_Users;
     private Locator loc_plusIcon;
-    private Locator loc_typeDropdownAdmin;
     private Locator loc_btn_type;
     private Locator loc_userRoleName;
     private Locator loc_checkbox_addEmployee;
-    private Locator loc_checkbox_Candidate;
-    private Locator loc_checkbox_training;
-    private Locator loc_checkbox_attendance;
-    private Locator loc_checkbox_Leave;
-    private Locator loc_checkbox_goals;
-    private Locator loc_btn_submit;
-
+    private Locator loc_gridrecordstotal;
     private Locator loc_filterIcon;
     private Locator loc_title_FilterPopup;
     private Locator loc_txtbox_employeename;
     private Locator loc_btn_filter_submit;
+
+    private String userroleName;
 
     public HRAdministrationPage(Pojo objPojo) {
         this.objPojo = objPojo;
         objUtilities = objPojo.getObjUtilities();
         objWrapperFunctions = objPojo.getObjWrapperFunctions();
         objConfig = objPojo.getObjConfig();
+        page = objPojo.getPage();
         objCorePerformancePage = new CorePerformancePage(objPojo);
 
-        // Initialize Playwright Locators
-        loc_leftmenu_HRAdministration = objPojo.getPage().locator("(//div[@id='menu-content']/ul/li[2]/a/span)[1]");
-        loc_header_toptooltip_HRAdministration = objPojo.getPage().locator("//div[@id=\"topbar\"]/ul/li[2]/div");
-        loc_btn_ManageUserRoles = objPojo.getPage().locator("//div[@id='top-ribbon-menu']/div[2]/child::top-level-menu-item/div/a[contains(text(),'Manage User Roles')]");
-        loc_btn_Users = objPojo.getPage().locator("//div[@id='top-ribbon-menu']/div[2]/child::top-level-menu-item/div/a[contains(text(),'Users')]");
-        loc_plusIcon = objPojo.getPage().locator("//div[@id='UserRolesDiv']/div/a");
-        loc_typeDropdownAdmin = objPojo.getPage().locator("//form[@name='userRoleForm']/div[1]//ul/li[1]");
-        loc_btn_type = objPojo.getPage().locator("//input[@type='text'][@class='select-dropdown']");
-        loc_userRoleName = objPojo.getPage().locator("//input[@type='text'][@id='user_role_name']");
-        loc_checkbox_addEmployee = objPojo.getPage().locator("//label[@for='checkbox_employee_add']");
-        loc_checkbox_Candidate = objPojo.getPage().locator("//div[@id='work_folw_management_div']/div/label[text()='Candidate']");
-        loc_checkbox_training = objPojo.getPage().locator("//ul[@class=\"collapsible\"]/li/div/p/label[text()='Training']");
-        loc_checkbox_attendance = objPojo.getPage().locator("//ul[@class=\"collapsible\"]/li/div/p/label[text()='Attendance']");
-        loc_checkbox_Leave = objPojo.getPage().locator("//ul[@class=\"collapsible\"]/li/div/p/label[text()='Leave']");
-        loc_checkbox_goals = objPojo.getPage().locator("//ul[@class=\"collapsible\"]/li/div/p/label[text()='Goals']");
-        loc_btn_submit = objPojo.getPage().locator("//div[@class='right-align']/a[2]");
-
-        loc_filterIcon = objPojo.getPage().locator("//ui-view[@name='navbar']/ul/li/a");
-        loc_title_FilterPopup = objPojo.getPage().locator("//h4[text()='Filter Users']");
-        loc_txtbox_employeename = objPojo.getPage().locator("//h4[text()='Filter Users']");
-        loc_btn_filter_submit = objPojo.getPage().locator("div[@class='modal-footer']/a[text()='Search']");
+        loc_leftmenu_HRAdministration = page.locator("(//div[@id='menu-content']/ul/li[2]/a/span)[1]");
+        loc_header_toptooltip_HRAdministration = page.locator("//div[@id=\"topbar\"]/ul/li[2]/div");
+        loc_plusIcon = page.locator("//div[@id='UserRolesDiv']/div/a");
+        loc_btn_type = page.locator("//input[@type='text'][@class='select-dropdown']");
+        loc_userRoleName = page.locator("//input[@type='text'][@id='user_role_name']");
+        loc_checkbox_addEmployee = page.locator("//label[@for='checkbox_employee_add']");
+        loc_gridrecordstotal = page.locator("//table[contains(@class,'highlight bordered')]//thead/tr/th[@class='row-name sortable']/parent::tr/parent::thead/following::tbody[1]/tr");
+        loc_filterIcon = page.locator("//ui-view[@name='navbar']/ul/li/a");
+        loc_title_FilterPopup = page.locator("//h4[text()='Filter Users']");
+        loc_txtbox_employeename = page.locator("//h4[text()='Filter Users']");
+        loc_btn_filter_submit = page.locator("div[@class='modal-footer']/a[text()='Search']");
     }
 
-    //pooja code started
-    public void clickTopToolTipMenu(Locator ele) {
-        objUtilities.logReporter("Click Plus Icon:: ", objWrapperFunctions.click(ele), false);
+    public void clickTopToolTipMenu(String str_menu) {
+        Locator loc = page.locator("//div[@id='top-ribbon-menu']/div[2]/child::top-level-menu-item/div/a[contains(text(),'" + str_menu + "')]");
+        objUtilities.logReporter("Click Top Tooltip Menu " + str_menu + " :clickTopToolTipMenu()", objWrapperFunctions.click(loc), false);
     }
 
     public void clickPlusIcon() {
-        objUtilities.logReporter("Click Plus Icon:: ", objWrapperFunctions.click(loc_plusIcon), false);
+        objUtilities.logReporter("Click Plus Icon:clickPlusIcon()", objWrapperFunctions.click(loc_plusIcon), false);
     }
 
-    public void fill_addUserRoleForm() {
-        objUtilities.logReporter("Add user role form:: ", objWrapperFunctions.click(loc_btn_type), false);
-        objUtilities.logReporter("Add user role form:: ", objWrapperFunctions.click(loc_typeDropdownAdmin), false);
-        objUtilities.logReporter("Add user role form:: ", objWrapperFunctions.waitTillElementEnabled(loc_userRoleName), false);
+    public void fill_addUserRoleForm(String typedropdown) {
+        objUtilities.logReporter("Click Type Dropdown:fill_addUserRoleForm()", objWrapperFunctions.click(loc_btn_type), false);
+        Locator loc = page.locator("//ul[contains(@class,'select-dropdown')]/li/span[text()='" + typedropdown + "']");
+        objUtilities.logReporter("Select value from Type Dropdown:fill_addUserRoleForm()", objWrapperFunctions.click(loc), false);
+        objUtilities.logReporter("Field user role form-waitTillElementEnabled:fill_addUserRoleForm()", objWrapperFunctions.waitTillElementEnabled(loc_userRoleName), false);
+        objUtilities.logReporter("Enter value in User Role Name:fill_addUserRoleForm()", objWrapperFunctions.setText(loc_userRoleName, generaterandomString()), false);
+    }
 
+    public String generaterandomString() {
         StringBuilder str = new StringBuilder("demo");
         Random rand = new Random();
         int randomNumber = 100 + rand.nextInt(900);
         str.append(randomNumber);
-
-        objUtilities.logReporter("Check employee actions:: ", objWrapperFunctions.setText(loc_userRoleName, str.toString()), false);
+        userroleName = str.toString();
+        return str.toString();
     }
 
-    public void checkEmployeeActions() {
-        objUtilities.logReporter("Check employee actions:: ", objWrapperFunctions.click(loc_checkbox_addEmployee), false);
+    public void checkEmployeeActions(String employeeaction) {
+        Locator loc = page.locator("//div[@id='employee_actions_div']/child::div/label[contains(text(),'" + employeeaction + "')]");
+        objUtilities.logReporter("Select Checkbox of employee actions:checkEmployeeActions ", objWrapperFunctions.click(loc), false);
     }
 
-    public void workflowManagement() {
-        objUtilities.logReporter("Work Flow management:: ", objWrapperFunctions.click(loc_checkbox_Candidate), false);
+    public void workflowManagement(String str) {
+        Locator loc = page.locator("//div[@id='work_folw_management_div']/div/label[text()='" + str + "']");
+        objUtilities.logReporter("Work Flow management:: ", objWrapperFunctions.click(loc), false);
     }
 
-    public void dataGroupPermissions() {
-        objUtilities.logReporter("Data Group Permissions:: ", objWrapperFunctions.click(loc_checkbox_training), false);
-        objUtilities.logReporter("Data Group Permissions:: ", objWrapperFunctions.click(loc_checkbox_attendance), false);
-        objUtilities.logReporter("Data Group Permissions:: ", objWrapperFunctions.click(loc_checkbox_Leave), false);
-        objUtilities.logReporter("Data Group Permissions:: ", objWrapperFunctions.click(loc_checkbox_goals), false);
+    public void check_checkboxes_dataGroupPermissions(String checkboxList) {
+        if (checkboxList != null) {
+            String[] checkboxArray = checkboxList.split("~");
+            for (String item : checkboxArray) {
+                Locator loc = page.locator("//ul[@class='collapsible']/li/div/p/label[text()='" + item.trim() + "']");
+                objUtilities.logReporter("Data Group Permissions-Training:: ", objWrapperFunctions.click(loc), false);
+            }
+        } else {
+            objUtilities.logReporter("Key listCheckbox not found in config.properties.", true, false);
+        }
     }
 
-    public void clickOnButton() {
-        objUtilities.logReporter("Click Type:: ", objWrapperFunctions.click(loc_btn_submit), false);
+    public void clickOnSubmitButton(String save) {
+        Locator loc = page.locator("//div[@class='right-align']/a[text()='" + save + "']");
+        objUtilities.logReporter("Click Type:: ", objWrapperFunctions.click(loc), false);
     }
 
     public void clickOnButton(Locator ele) {
@@ -116,23 +113,26 @@ public class HRAdministrationPage {
     }
 
     public void clickOnMenu() {
-        objUtilities.logReporter("VERIFY - Clicked on Left menu HR Administration:: ",objWrapperFunctions.click(loc_leftmenu_HRAdministration), false);
+        objUtilities.logReporter("VERIFY - Clicked on Left menu HR Administration:clickOnMenu() ", objWrapperFunctions.click(loc_leftmenu_HRAdministration), false);
     }
 
-    // Users menu
+    public void verifygridview(String typedropdown) {
+        int rowCount = objWrapperFunctions.getTableRowCount(loc_gridrecordstotal);
+        for (int j = 1; j <= rowCount; j++) {
+            Locator loc2 = page.locator("(//table[contains(@class,'highlight bordered')]//thead/tr/th[contains(@class,'sortable')]/parent::tr/parent::thead/following::tbody[1]/tr/td[2]//span)[" + j + "]");
+            objUtilities.logReporter("Verify created record displayed on Grid :verifygridview() ", objWrapperFunctions.getText(loc2, "text").equalsIgnoreCase(userroleName), false);
+            Locator loc3 = page.locator("//table[contains(@class,'highlight bordered')]//thead/tr/th[contains(@class,'sortable')]/parent::tr/parent::thead/following::tbody[1]/tr/td[3]//span[" + j + "]");
+            objUtilities.logReporter("Verify Type of record displayed on Grid :verifygridview() ", objWrapperFunctions.getText(loc3, "text").equalsIgnoreCase(typedropdown), false);
+        }
+    }
+
     public void clickOnFilterIcon() {
-        objUtilities.logReporter("VERIFY - Filter record by clicking filter Icon:: ",objWrapperFunctions.click(loc_filterIcon), false);
+        objUtilities.logReporter("VERIFY - Filter record by clicking filter Icon:: ", objWrapperFunctions.click(loc_filterIcon), false);
     }
 
     public void enterEmployeenameInFilterUsers(String empname) {
-        objUtilities.logReporter("Filter :: :: ",objWrapperFunctions.getText(loc_title_FilterPopup, "text").equalsIgnoreCase("Filter Users"), false);
-        objUtilities.logReporter("Filter :: Enter employee name:: ",objWrapperFunctions.setText(loc_txtbox_employeename, empname), false);
-        objUtilities.logReporter("VERIFY - Click on submit:: ", objWrapperFunctions.click(loc_btn_filter_submit),false);
+        objUtilities.logReporter("Filter :: :: ", objWrapperFunctions.getText(loc_title_FilterPopup, "text").equalsIgnoreCase("Filter Users"), false);
+        objUtilities.logReporter("Filter :: Enter employee name:: ", objWrapperFunctions.setText(loc_txtbox_employeename, empname), false);
+        objUtilities.logReporter("VERIFY - Click on submit:: ", objWrapperFunctions.click(loc_btn_filter_submit), false);
     }
-
-    //pooja code ended    
-    public void chklogger() {
-        objUtilities.logReporter("hi here", true, false);
-    }
-
 }

@@ -21,5 +21,4 @@ public class ViewForCorePerformance {
 		objWrapperFunctions = objPojo.getObjWrapperFunctions();
 		objUtilities = objPojo.getObjUtilities();
 	}
-	
 }

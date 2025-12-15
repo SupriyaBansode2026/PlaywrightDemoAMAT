@@ -967,27 +967,10 @@ public class CustomReporterHelper
 		System.out.println("Suite Name : "+System.getProperty("suiteName"));
 		
 		//RPHADKE_29102018 - insert in SQL based on parameter value 'insertInSQL'
-		//if(System.getProperty("insertInSQL") != null && System.getProperty("insertInSQL").equals("Yes"))
 		String insert = "true";
-	/*	if(insert=="true")
-			this.insertRunResultInSQL(objSqlData, sObjectID);*/
-		//if(System.getProperty("deliverables")!=null&&System.getProperty("deliverables")!="")
 		
 		if(objConfig.getProperty("DBInsertInSQL").contains("true"))
-//		if(System.getProperty("insertInSQL").contains("true"))
 			this.insertRunResultInSQL(objSqlData, sObjectID);
-			//System.out.println("Currently commented insertIntoSQL function for testing purpose");
-		
-		/*Calendar objCalender = Calendar.getInstance();
-		Date objToday = objCalender.getTime();
-		String sDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(objToday.getTime());
-		System.out.println(sDay);
-		System.out.println("Insert in SQL parameter value : "+System.getProperty("insertInSQL"));
-		if(objConfig.getProperty("insertResultInDB").equalsIgnoreCase("true") || sDay.equalsIgnoreCase("Wednesday"))
-		{
-			System.out.println("Insert into SQL");
-			//this.insertRunResultInSQL(objSqlData, sObjectID);
-		}*/
 		
 		if(runningScriptName.equalsIgnoreCase("SCV_Scenario3") && objConfig.getProperty("SCV_Environment").equalsIgnoreCase("true"))
 		{
@@ -1010,10 +993,6 @@ public class CustomReporterHelper
 				exception.printStackTrace();
 			}
 		}
-		
-		
-		
-		
 		objSqlData = null;
 	}
 	
