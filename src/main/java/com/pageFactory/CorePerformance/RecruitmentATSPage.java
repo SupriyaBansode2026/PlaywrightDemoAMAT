@@ -4,66 +4,107 @@ import com.generic.Pojo;
 import com.generic.Utilities;
 import com.generic.WrapperFunctions;
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
 
 public class RecruitmentATSPage {
     private WrapperFunctions objWrapperFunctions;
     private Utilities objUtilities;
     private Pojo objPojo;
-    private Page page;
     boolean bResult = false;
+
+    private Locator recruitmentTab;
+    private Locator addCandidate;
+    private Locator firstName;
+    private Locator lastName;
+    private Locator email;
+    private Locator save;
+    private Locator stage;
+    private Locator toastMsg;
+    private Locator uploadFile;
+
+    String path = "C:\\Users\\ctaware\\Downloads\\UAN Allotment.pdf";
 
     public RecruitmentATSPage(Pojo objPojo) {
         this.objPojo = objPojo;
         objUtilities = objPojo.getObjUtilities();
-        objWrapperFunctions = objPojo.getObjWrapperFunctions();
-        page = objPojo.getPage();
+        objWrapperFunctions = new WrapperFunctions(objPojo);
+
+        recruitmentTab = objPojo.getPage().locator("(//li//span[text()='Recruitment (ATS)'])[1]");
+        addCandidate = objPojo.getPage().locator("//button[@toolTip='Add Candidate']");
+        firstName = objPojo.getPage().locator("//input[@id='addCandidateForm_firstName']");
+        lastName = objPojo.getPage().locator("//input[@id='addCandidateForm_lastName']");
+        email = objPojo.getPage().locator("//input[@id='addCandidateForm_email']");
+        save = objPojo.getPage().locator("//div[text()='Save']");
+        stage = objPojo.getPage().locator("(//div[@class='oxd-table-body']//div[@class='oxd-table-card --loaded oxd-row-highlight--success']//div[@role='cell'])[7]//div[@class='selected-content']");
+        toastMsg = objPojo.getPage().locator("//p[text()='Successfully saved']");
+        uploadFile = objPojo.getPage().locator("//div[text()='No file chosen']");
     }
 
-    private String recruitmentTab = "(//li//span[text()='Recruitment (ATS)'])[1]";
-    private String addCandidate = "//button[@toolTip='Add Candidate']";
-    private String firstName = "//input[@id='addCandidateForm_firstName']";
-    private String lastName = "//input[@id='addCandidateForm_lastName']";
-    private String email = "//input[@id='addCandidateForm_email']";
-    private String save = "//div[text()='Save']";
-    private String stage = "(//div[@class='oxd-table-body']//div[@class='oxd-table-card --loaded oxd-row-highlight--success']//div[@role='cell'])[7]//div[@class='selected-content']";
-    private String toastMsg = "//p[text()='Successfully saved']";
-    private String uploadFile = "//div[text()='No file chosen']";
-
-    String path = "C:\\Users\\ctaware\\Downloads\\UAN Allotment.pdf";
-
     public void clickOnRecruitmentATS() {
-        objUtilities.logReporter("Clicked on 'Recruitment(ATS)' tab : clickOnRecruitmentATS()",
-            objWrapperFunctions.click(recruitmentTab), false);
+        objWrapperFunctions.waitForElementPresence(recruitmentTab, "5");
+        objUtilities.logReporter(
+            "Clicked on 'Recruitment(ATS)' tab : clickOnRecruitmentATS()",
+            objWrapperFunctions.click(recruitmentTab),
+            false
+        );
     }
 
     public void clickOnAddCandidate() {
-        objUtilities.logReporter("Clicked on 'Add Candidate' button : clickOnAddCandidate()",
-            objWrapperFunctions.click(addCandidate), false);
+        objWrapperFunctions.waitForElementPresence(addCandidate, "5");
+        objUtilities.logReporter(
+            "Clicked on 'Add Candidate' button : clickOnAddCandidate()",
+            objWrapperFunctions.click(addCandidate),
+            false
+        );
     }
 
     public void enterCandidateDetails(String fName, String lName, String emailID) {
-        objUtilities.logReporter("Enter First Name : enterCandidateDetails()",
-            objWrapperFunctions.setText(firstName, fName), false);
-        objUtilities.logReporter("Enter Last Name : enterCandidateDetails()",
-            objWrapperFunctions.setText(lastName, lName), false);
-        objUtilities.logReporter("Enter Email ID : enterCandidateDetails()",
-            objWrapperFunctions.setText(email, emailID), false);
+        objWrapperFunctions.waitForElementPresence(firstName, "5");
+        objUtilities.logReporter(
+            "Enter First Name : enterCandidateDetails()",
+            objWrapperFunctions.setText(firstName, fName),
+            false
+        );
+
+        objWrapperFunctions.waitForElementPresence(lastName, "5");
+        objUtilities.logReporter(
+            "Enter Last Name : enterCandidateDetails()",
+            objWrapperFunctions.setText(lastName, lName),
+            false
+        );
+
+        objWrapperFunctions.waitForElementPresence(email, "5");
+        objUtilities.logReporter(
+            "Enter Email ID : enterCandidateDetails()",
+            objWrapperFunctions.setText(email, emailID),
+            false
+        );
     }
 
-    public void clickOnSave(){
-        objUtilities.logReporter("Clicked on 'Add Candidate' button : clickOnSave()",
-            objWrapperFunctions.click(save), false);
+    public void clickOnSave() {
+        objWrapperFunctions.waitForElementPresence(save, "5");
+        objUtilities.logReporter(
+            "Clicked on 'Add Candidate' button : clickOnSave()",
+            objWrapperFunctions.click(save),
+            false
+        );
     }
 
     public void checkStageStatus(String expectedStatus) {
+        objWrapperFunctions.waitForElementPresence(stage, "5");
         String text = objWrapperFunctions.getText(stage, "text");
-        objUtilities.logReporter("Stage status of newly added candidate should be 'Application Received' : checkStageStatus()",
-            text != null && text.equals(expectedStatus), false);
+        objUtilities.logReporter(
+            "Stage status of newly added candidate should be 'Application Received' : checkStageStatus()",
+            text.equals(expectedStatus),
+            false
+        );
     }
 
     public void verifyToastMsg() {
-        objUtilities.logReporter("Verify 'Successfully saved' toast message displayed : verifyToastMsg()",
-            objWrapperFunctions.checkElementDisplyed(toastMsg), false);
+        objWrapperFunctions.waitForElementPresence(toastMsg, "5");
+        objUtilities.logReporter(
+            "Verify 'Successfully saved' toast message displayed : verifyToastMsg()",
+            objWrapperFunctions.checkElementDisplyed(toastMsg),
+            false
+        );
     }
 }

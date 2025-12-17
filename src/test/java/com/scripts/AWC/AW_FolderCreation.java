@@ -2,21 +2,18 @@ package com.scripts.AWC;
 
 import java.util.Properties;
 
-import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.generic.BaseTest;
-import com.generic.TestContext;
 import com.generic.Utilities;
 import com.views.AWC.ViewForAWC;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
 
-public class AW_Launch_Login extends BaseTest {
+public class AW_FolderCreation extends BaseTest {
 
 	private Utilities objUtilities;
 	Properties objAWCProperties;
@@ -28,11 +25,11 @@ public class AW_Launch_Login extends BaseTest {
 		objUtilities = this.getObjUtilities();
 		objviewForAWC = new ViewForAWC(this);
 	}
-	
-	@Story("Title AW_Launch_Login")
-	@Description("Desc AW_Launch_Login")
+
+	@Story("CORE_Exploratory_CCBModule_1")
+	@Description("CCB page load performance � ECO PM finding")
 	@Test
-	public void AW_Launch_Login_Method() {
+	public void CreateProjectAndPCR() {
 		objUtilities = this.getObjUtilities();
 		objAWCProperties = this.loadConfigPropertiesForModules("AWC");
 
@@ -40,8 +37,10 @@ public class AW_Launch_Login extends BaseTest {
 		objviewForAWC.enterUsername(objAWCProperties.getProperty("user"));
 		objviewForAWC.enterPassword(objAWCProperties.getProperty("password"));
 		objviewForAWC.clickOnLoginButton();
+		objviewForAWC.clickOnExplorerIcon();
+		objviewForAWC.verifySubOptionInFolderProperties(objAWCProperties.getProperty("sUserProperties"));
+		objviewForAWC.clickOnMoreOption();
 		objviewForAWC.clickOnAvtarIcon();
-		objviewForAWC.verifyAvtarUserInfoPanel(objAWCProperties.getProperty("sAvtarOption"));
 		objviewForAWC.clickOnSignOutBtn();
 		objviewForAWC.verifyLoginPageDisplay();
 

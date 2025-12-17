@@ -19,6 +19,9 @@ import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.ViewportSize;
 
 import org.junit.jupiter.api.*;
+import org.testng.ITestResult;
+import org.testng.annotations.BeforeMethod;
+
 //import com.jira.requests.JiraRequest;
 //import com.teamcenter.clientx.AppXSession;
 import com.microsoft.playwright.*;
@@ -518,6 +521,15 @@ public class BaseTest extends Pojo{
 			} catch (Exception e) {
 				 e.printStackTrace();
 			} 
+		}
+		
+		@BeforeMethod
+		public void setUp(ITestResult result) {
+	 
+			String testName = result.getMethod().getMethodName();
+			String className = result.getTestClass().getRealClass().getSimpleName();
+	 
+			TestContext.setTestName(className + "_" + testName);
 		}
 	
 }

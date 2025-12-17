@@ -41,6 +41,12 @@ public class AW_User_Profile_Interface extends BaseTest {
 		objviewForAWC.verifyAvtarUserInfoPanel(objAWCProperties.getProperty("sAvtarOption"));
 		objviewForAWC.clickOnManageProfileLink();
 		objviewForAWC.verifyManageProfilePage(objAWCProperties.getProperty("sManageProfileOptions"));
+		String [] sUserProfilesOpt=objAWCProperties.getProperty("sUserProfiles").split(",");
+		for(int i = 0; i < sUserProfilesOpt.length; i++)
+		{
+			objviewForAWC.verifySubOption(sUserProfilesOpt[i]);
+		}
+		objviewForAWC.clickOnAvtarIcon();
 		objviewForAWC.clickOnSignOutBtn();
 		objviewForAWC.verifyLoginPageDisplay();
 

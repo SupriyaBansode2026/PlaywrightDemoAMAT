@@ -3,11 +3,12 @@ package com.pageFactory.CorePerformance;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import com.microsoft.playwright.Locator;
 
 import com.generic.Pojo;
 import com.generic.Utilities;
 import com.generic.WrapperFunctions;
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
 
 public class DashboardPage {
 
@@ -16,18 +17,19 @@ public class DashboardPage {
     private Pojo objPojo;
     private Properties objCCBProperties;
     boolean bResult = false;
+    private Page page;
 
-    private String widgetListSelector = "//div[@class=\"row\"]/div//span[@class=\"widget-content-container\"]//div[@class=\"dashboard-widget-container\"]//span[@class=\"widget-header-text\" or @style='margin-left: 0.75rem; text-align: left']";
-    private String buzzSelector = "//div[@class='top-level-menu-item-container']/a[contains(text(),'Buzz')]";
-    private String leaveToAprvSelector = "//span[text()='Leave Requests to Approve']/preceding-sibling::span";
-    private String ukAttendenceSelector = "//span[text()='Attendance Sheets to Approve']/preceding-sibling::span";
-    private String generalReqToAprvSelector = "//span[text()='General Requests to Approve']/preceding-sibling::span";
+    private Locator widgetList;
+    private Locator buzz;
+    private Locator leaveToAprv;
+    private Locator ukAttendence;
+    private Locator generalReqToAprv;
     private String myactionTabLinks = "//span[text()='%s']";
-    private String homeIconSelector = "//i[text()='oxd_home_menu']";
+    private Locator homeIcon;
 
-    private String leavePaginationSelector = "//li[@class='summary']";
-    private String generalPaginationSelector = "//li[@class='summary']";
-    private String ukAttendenceApprovalSelector = "//span[@class='available-count']";
+    private Locator leavePagination;
+    private Locator generalPagination;
+    private Locator ukAttendenceApproval;
 
     List<String> expectedWidgetList = new ArrayList<>();
 
@@ -38,8 +40,18 @@ public class DashboardPage {
     public DashboardPage(Pojo objPojo) {
         this.objPojo = objPojo;
         objUtilities = objPojo.getObjUtilities();
-        objWrapperFunctions = objPojo.getObjWrapperFunctions();
+        objWrapperFunctions = new WrapperFunctions(objPojo);
         objCCBProperties = objPojo.getObjConfig();
+        page = objPojo.getPage();
+        widgetList = page.locator("//div[@class=\"row\"]/div//span[@class=\"widget-content-container\"]//div[@class=\"dashboard-widget-container\"]//span[@class=\"widget-header-text\" or @style='margin-left: 0.75rem; text-align: left']");
+        buzz = page.locator("//div[@class='top-level-menu-item-container']/a[contains(text(),'Buzz')]");
+        leaveToAprv = page.locator("//span[text()='Leave Requests to Approve']/preceding-sibling::span");
+        ukAttendence = page.locator("//span[text()='Attendance Sheets to Approve']/preceding-sibling::span");
+        generalReqToAprv = page.locator("//span[text()='General Requests to Approve']/preceding-sibling::span");
+        homeIcon = page.locator("//i[text()='oxd_home_menu']");
+        leavePagination = page.locator("//li[@class='summary']");
+        generalPagination = page.locator("//li[@class='summary']");
+        ukAttendenceApproval = page.locator("//span[@class='available-count']");
     }
 
     public void verifyDashboardPageUrl() {
@@ -52,18 +64,18 @@ public class DashboardPage {
     }
 
     public List<Locator> getWebElementsList() {
-        return objWrapperFunctions.getWebElementList(widgetListSelector);
+        return objWrapperFunctions.getWebElementList("//div[@class=\"row\"]/div//span[@class=\"widget-content-container\"]//div[@class=\"dashboard-widget-container\"]//span[@class=\"widget-header-text\" or @style='margin-left: 0.75rem; text-align: left']");
     }
 
     public boolean getElementsList(String expectedWidgetList) {
-        List<Locator> elelist = objWrapperFunctions.getWebElementList(widgetListSelector);
-        List<String> widgetTexts = new ArrayList<String>();
+        List<Locator> elelist = objWrapperFunctions.getWebElementList("//div[@class=\"row\"]/div//span[@class=\"widget-content-container\"]//div[@class=\"dashboard-widget-container\"]//span[@class=\"widget-header-text\" or @style='margin-left: 0.75rem; text-align: left']");
+        List<String> widgetListActual = new ArrayList<String>();
         for (Locator ele : elelist) {
-            widgetTexts.add(ele.textContent() == null ? "" : ele.textContent().trim());
+            widgetListActual.add(ele.textContent().trim());
         }
         String[] liArr = expectedWidgetList.split("~");
         for (String str : liArr) {
-            if (widgetTexts.contains(str))
+            if (widgetListActual.contains(str))
                 return true;
             else
                 break;
@@ -77,44 +89,50 @@ public class DashboardPage {
     }
 
     public void checkSubTabVisibiltyOnDashboardPage(String elementToBeCheck) {
-        String subTabToBeCheckSelector = "//div[@class='top-level-menu-item-container']/a[contains(text(),'" + elementToBeCheck + "')]";
+        String subTabXpath = "//div[@class='top-level-menu-item-container']/a[contains(text(),'" + elementToBeCheck + "')]";
+        Locator subTabToBeCheck = page.locator(subTabXpath);
+        objWrapperFunctions.waitForElementPresence(subTabToBeCheck, "5");
         objUtilities.logReporter(
                 elementToBeCheck + " Sub-tab displayed on dashboard page : checkSubTabVisibiltyOnDashboardPage()",
-                objWrapperFunctions.checkElementDisplyed(subTabToBeCheckSelector), false);
+                objWrapperFunctions.checkElementDisplyed(subTabToBeCheck), false);
     }
 
     public void checkLeftMenuTabVisibiltyOnDashboardPage(String menu) {
-        String menuTabToBeCheckSelector = "(//li//span[text()='" + menu + "'])[1]";
+        String menuTabXpath = "(//li//span[text()='" + menu + "'])[1]";
+        Locator menuTabToBeCheck = page.locator(menuTabXpath);
 
+        objWrapperFunctions.waitForElementPresence(menuTabToBeCheck, "5");
         objUtilities.logReporter("Scroll till Left Menu Tab " + menu + " : checkLeftMenuTabVisibiltyOnDashboardPage()",
-                objWrapperFunctions.scrollTillElement(menuTabToBeCheckSelector), false);
+                objWrapperFunctions.scrollTillElement(menuTabXpath), false);
 
+        objWrapperFunctions.waitForElementPresence(menuTabToBeCheck, "5");
         objUtilities.logReporter(
                 menu + " Left Menu Tab displayed on dashboard page : checkLeftMenuTabVisibiltyOnDashboardPage()",
-                objWrapperFunctions.checkElementDisplyed(menuTabToBeCheckSelector), false);
+                objWrapperFunctions.checkElementDisplyed(menuTabToBeCheck), false);
     }
 
     public void clickOnBuzz() {
-        objUtilities.logReporter("Clicked on Buzz option: clickOnBuzz()", objWrapperFunctions.click(buzzSelector), false);
+        objWrapperFunctions.waitForElementPresence(buzz, "5");
+        objUtilities.logReporter("Clicked on Buzz option: clickOnBuzz()", objWrapperFunctions.click(buzz), false);
     }
 
     public void requestCount(String option) {
         int count = 0;
         if (option.equals(objCCBProperties.getProperty("leaveReqAprvlLink"))) {
-            objWrapperFunctions.waitForElementPresence(leaveToAprvSelector);
-            String txt = objWrapperFunctions.getText(leaveToAprvSelector, "text");
+            objWrapperFunctions.waitForElementPresence(leaveToAprv, "5");
+            String txt = objWrapperFunctions.getText(leaveToAprv, "text");
             count = extractText(txt);
             leaveRequestCount = count;
             System.out.println("Total Leave Requests to Approve count is - " + leaveRequestCount);
         } else if (option.equals(objCCBProperties.getProperty("ukAttendenceAprvlLink"))) {
-            objWrapperFunctions.waitForElementPresence(ukAttendenceSelector);
-            String txt = objWrapperFunctions.getText(ukAttendenceSelector, "text");
+            objWrapperFunctions.waitForElementPresence(ukAttendence, "5");
+            String txt = objWrapperFunctions.getText(ukAttendence, "text");
             count = extractText(txt);
             ukAttendanceCount = count;
             System.out.println("Total UK Attendance sheets to Approve count is - " + ukAttendanceCount);
         } else if (option.equals(objCCBProperties.getProperty("generalReqAprvlLink"))) {
-            objWrapperFunctions.waitForElementPresence(generalReqToAprvSelector);
-            String txt = objWrapperFunctions.getText(generalReqToAprvSelector, "text");
+            objWrapperFunctions.waitForElementPresence(generalReqToAprv, "5");
+            String txt = objWrapperFunctions.getText(generalReqToAprv, "text");
             count = extractText(txt);
             generalRequestCount = count;
             System.out.println("Total General Requests to Approve count is - " + generalRequestCount);
@@ -132,18 +150,23 @@ public class DashboardPage {
     }
 
     public String getText(String locator, String locatorvalue, boolean applyWait) {
-        String eleSelector = locatorvalue;
-        return objWrapperFunctions.getText(eleSelector, "text");
+        Locator ele = page.locator(locatorvalue);
+        objWrapperFunctions.waitForElementPresence(ele, "5");
+        return objWrapperFunctions.getText(ele, "text");
     }
 
     public String getText(String locatorvalue) {
-        String eleSelector = locatorvalue;
-        return objWrapperFunctions.getText(eleSelector, "text");
+        Locator ele = page.locator(locatorvalue);
+        objWrapperFunctions.waitForElementPresence(ele, "5");
+        return objWrapperFunctions.getText(ele, "text");
     }
 
     public void clickOnLink(String text) {
         String locator = String.format(myactionTabLinks, text);
-        objUtilities.logReporter("Click on '" + text + " ' link : clickOnLink()", objWrapperFunctions.click(locator), false);
+        Locator eleToClick = page.locator(locator);
+        objWrapperFunctions.waitForElementPresence(eleToClick, "5");
+        objUtilities.logReporter("Click on '" + text + " ' link : clickOnLink()", objWrapperFunctions.click(eleToClick),
+                false);
     }
 
     public void verifyUrl(String urlText) {
@@ -152,12 +175,13 @@ public class DashboardPage {
     }
 
     public void clickOnIcon() {
-        objWrapperFunctions.waitForElementPresence(homeIconSelector);
-        objUtilities.logReporter("clicked on Home Icon: clickOnIcon()", objWrapperFunctions.click(homeIconSelector), false);
+        objWrapperFunctions.waitForElementPresence(homeIcon, "5");
+        objUtilities.logReporter("clicked on Home Icon: clickOnIcon()", objWrapperFunctions.click(homeIcon), false);
     }
 
     public void getLeavePaginationText(String val) {
-        String str = objWrapperFunctions.getText(leavePaginationSelector, val);
+        objWrapperFunctions.waitForElementPresence(leavePagination, "5");
+        String str = objWrapperFunctions.getText(leavePagination, val);
         int count = getTheCount(str);
         objUtilities.logReporter(
                 "Pagination count on Leave Page match the 'Leave Request Approval' count from My Actions widget : getLeavePaginationText()",
@@ -165,7 +189,8 @@ public class DashboardPage {
     }
 
     public void getGeneralRequestPaginationText(String val) {
-        String str = objWrapperFunctions.getText(generalPaginationSelector, val);
+        objWrapperFunctions.waitForElementPresence(generalPagination, "5");
+        String str = objWrapperFunctions.getText(generalPagination, val);
         int count = getTheCount(str);
         objUtilities.logReporter(
                 "Pagination count on Leave Page match the 'Leave Request Approval' count from My Actions widget : getGeneralRequestPaginationText()",
@@ -173,7 +198,8 @@ public class DashboardPage {
     }
 
     public void getUKAttendenceApprovalText(String val) {
-        String str = objWrapperFunctions.getText(ukAttendenceApprovalSelector, val);
+        objWrapperFunctions.waitForElementPresence(ukAttendenceApproval, "5");
+        String str = objWrapperFunctions.getText(ukAttendenceApproval, val);
         int count = getTheCount(str);
         objUtilities.logReporter(
                 "Pagination count on Leave Page match the 'Leave Request Approval' count from My Actions widget : getUKAttendenceApprovalText()",

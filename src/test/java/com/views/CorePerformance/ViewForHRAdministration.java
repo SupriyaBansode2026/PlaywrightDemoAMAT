@@ -46,10 +46,6 @@ public class ViewForHRAdministration {
 
 		objHRAdministrationPage.workflowManagement(str);
 	}
-//		objHRAdministrationPage.check_checkboxes_dataGroupPermissions("Training");
-//		objHRAdministrationPage.check_checkboxes_dataGroupPermissions("Attendance");
-//		objHRAdministrationPage.check_checkboxes_dataGroupPermissions("Leave");
-//		objHRAdministrationPage.check_checkboxes_dataGroupPermissions("Goals");
 	
 	public void checkListOfCheckboxes(String str) {
 
@@ -63,12 +59,5 @@ public class ViewForHRAdministration {
 
 		objHRAdministrationPage.verifygridview(str);
 	}
-
-//	public void validateHRAdministration_Users(String empname) { //this method not used
-//		objHRAdministrationPage.clickOnMenu();
-//		objHRAdministrationPage.clickTopToolTipMenu("Users");
-//		objHRAdministrationPage.clickOnFilterIcon();
-//		objHRAdministrationPage.enterEmployeenameInFilterUsers(empname);
-//	}
 
 }

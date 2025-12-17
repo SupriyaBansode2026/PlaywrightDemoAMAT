@@ -673,6 +673,7 @@ public class WrapperFunctions {
 	        return -1;
 	    }
 	}
+
 	public boolean waitForElementPresence(String selector, String sWaitFor) {
 	    try {
 	        page.waitForSelector(selector, new Page.WaitForSelectorOptions()

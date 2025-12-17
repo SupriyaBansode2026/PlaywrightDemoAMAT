@@ -59,4 +59,28 @@ public class ViewForAWC {
 	public void clickOnManageProfileLink() {
 		objAWCPage.clickOnManageProfileLink();
 	}
+	public void verifySubOption(String sValues) {
+		String[] sValOpt = sValues.split(";");
+		String[] sValSubOpt = sValOpt[1].split("~");
+		for (int i = 0; i < sValSubOpt.length; i++) {
+			objAWCPage.verifySubOption(sValOpt[0], sValSubOpt[i]);
+		}
+	}
+	public void verifySubOptionInFolderProperties(String sValues)
+	{
+		String[] sValOpt = sValues.split("~");
+		String[] sValSubOpt = sValOpt[1].split(",");
+		for (int i = 0; i < sValSubOpt.length; i++) {
+			objAWCPage.verifySubOptionInFolderProperties(sValSubOpt[0], sValSubOpt[i]);
+		}
+	}
+
+	public void clickOnExplorerIcon() {
+		objAWCPage.clickOnExplorerIcon();
+	}
+
+	public void clickOnMoreOption() {
+		objAWCPage.clickOnMoreOption();
+	}
+	
 }

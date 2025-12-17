@@ -2,7 +2,6 @@ package com.scripts.CorePerformance;
 
 import java.util.Hashtable;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
@@ -39,16 +38,6 @@ public class CORE_Exploratory_CCBModule_1 extends BaseTest
 	{
 		objUtilities = this.getObjUtilities();
 		objCCBProperties = this.loadConfigPropertiesForModules("CorePerformance");
-		
-//		objUtilities.clickMenuOptionPerformace(true, "CCB Module", "");
-//		
-//		String StartTime = objUtilities.getCurrentDateTime();
-//		objUtilities.waitTillPageLoadSCVPerf(By.xpath("//div[@class='panel-heading' and text()='SSG BUs']//parent::div//div[contains(text(),'" + objCCBProperties.getProperty("sMDPBU") + "')]"));
-//		String EndTime = objUtilities.getCurrentDateTime();
-//		objUtilities.logReporter("CCB Module Page"+"@~"+StartTime+"@~"+EndTime+"@~"+"NA",true,false);
-//		
-//		objViewForCorePerformance.selectBUOnCCBModulePage(objCCBProperties.getProperty("sMDPBU"));
-//		objViewForCorePerformance.clickOnExportToExcelOnECOPMReview();
 		
 		objUtilities.logReporter("TC Completed", true, false);
 	}
